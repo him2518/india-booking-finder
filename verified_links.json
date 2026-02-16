@@ -163,6 +163,8 @@
   "kochi_metro": {
     "service_name": "Kochi Metro & Water Metro",
     "authority": "KMRL",
+    "coverage": "Kochi, Kerala",
+    "keywords": ["kochi metro", "kerala metro", "water metro", "kmrl", "metro kerala"],
     "url": "https://kochimetro.org/",
     "tips": "Same card works for Metro Rail and the Water Metro ferries."
   },

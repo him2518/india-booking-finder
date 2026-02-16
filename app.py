@@ -34,8 +34,9 @@ KNOWN_GOV_RELATED_DOMAINS = {
 }
 SERVICE_TERMS = {
     "bus", "train", "ferry", "ticket", "tickets", "booking", "book", "reservation",
-    "darshan", "entry", "visa", "passport", "yatra", "registration", "tourist",
+    "darshan", "entry", "visa", "passport", "yatra", "registration", "tourist", "metro",
 }
+MODE_TERMS = {"metro", "bus", "train", "ferry", "safari", "permit", "visa", "passport", "darshan"}
 ALIASES = {
     "uttarpradesh": "uttar pradesh",
     "uttar-pradesh": "uttar pradesh",
@@ -146,6 +147,7 @@ def tokenize(text):
 def local_match_service(user_query, links_db):
     query_tokens = set(tokenize(user_query))
     query_location_tokens = {t for t in query_tokens if t not in SERVICE_TERMS}
+    query_mode_tokens = query_tokens & MODE_TERMS
     best_key = None
     best_score = 0.0
 
@@ -162,7 +164,7 @@ def local_match_service(user_query, links_db):
         coverage_text = data.get("coverage", "")
         service_tokens = set(tokenize(" ".join(service_texts)))
         coverage_tokens = set(tokenize(coverage_text))
-        candidate_tokens = service_tokens | coverage_tokens
+        candidate_mode_tokens = service_tokens & MODE_TERMS
 
         overlap_score = (
             len(query_tokens & service_tokens) / max(len(service_tokens), 1)
@@ -183,12 +185,16 @@ def local_match_service(user_query, links_db):
         location_mismatch_penalty = 0.0
         if query_location_tokens and coverage_tokens and not (query_location_tokens & coverage_tokens):
             location_mismatch_penalty = 0.20
+        mode_mismatch_penalty = 0.0
+        if query_mode_tokens and not (query_mode_tokens & candidate_mode_tokens):
+            mode_mismatch_penalty = 0.40
 
         score = (
             (0.50 * overlap_score)
             + (0.25 * similarity_score)
             + (0.35 * coverage_overlap_score)
             - location_mismatch_penalty
+            - mode_mismatch_penalty
         )
 
         if score > best_score:
