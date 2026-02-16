@@ -26,6 +26,22 @@ STOPWORDS = {
 }
 
 OFFICIAL_SUFFIXES = (".gov.in", ".nic.in")
+KNOWN_GOV_RELATED_DOMAINS = {
+    "irctc.co.in",
+    "ksrtc.in",
+    "soutickets.in",
+    "maavaishnodevi.org",
+}
+SERVICE_TERMS = {
+    "bus", "train", "ferry", "ticket", "tickets", "booking", "book", "reservation",
+    "darshan", "entry", "visa", "passport", "yatra", "registration", "tourist",
+}
+ALIASES = {
+    "uttarpradesh": "uttar pradesh",
+    "uttar-pradesh": "uttar pradesh",
+    "andamanandnicobar": "andaman nicobar",
+    "karnatakastate": "karnataka",
+}
 
 
 @st.cache_data(show_spinner=False)
@@ -46,6 +62,11 @@ def load_links():
 def get_links_file_path():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     return os.path.join(current_dir, "verified_links.json")
+
+
+def normalize_host(url):
+    host = urlparse(url).netloc.lower()
+    return host[4:] if host.startswith("www.") else host
 
 
 def slugify(text):
@@ -75,12 +96,12 @@ def save_links_db(links_db):
 
 def upsert_discovered_result(links_db, service_query, location_query, top_result):
     discovered_url = top_result["url"]
-    discovered_host = urlparse(discovered_url).netloc.lower()
+    discovered_host = normalize_host(discovered_url)
     discovered_title = top_result.get("title", "Official Service Portal").strip()
 
     # Update existing record if same host already exists.
     for key, row in links_db.items():
-        existing_host = urlparse(row.get("url", "")).netloc.lower()
+        existing_host = normalize_host(row.get("url", ""))
         if existing_host == discovered_host:
             row["service_name"] = row.get("service_name") or discovered_title
             row["authority"] = row.get("authority") or "Government Portal"
@@ -102,17 +123,20 @@ def upsert_discovered_result(links_db, service_query, location_query, top_result
 
     links_db[new_key] = {
         "service_name": discovered_title,
-        "authority": "Government Portal (web discovered)",
+        "authority": "Government Portal (AI-assisted web discovered)",
         "coverage": location_query.strip() or "India",
         "keywords": build_keywords(service_query, location_query, discovered_title),
         "url": discovered_url,
-        "tips": "Auto-added from strict official domain search. Verify latest instructions on the portal.",
+        "tips": "Auto-added from AI/heuristic government-likelihood check. Verify latest instructions on the portal.",
     }
     return "created", new_key
 
 
 def normalize(text):
-    return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9\s]", " ", text.lower())).strip()
+    normalized_text = text.lower()
+    for raw, replacement in ALIASES.items():
+        normalized_text = normalized_text.replace(raw, replacement)
+    return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9\s]", " ", normalized_text)).strip()
 
 
 def tokenize(text):
@@ -121,31 +145,51 @@ def tokenize(text):
 
 def local_match_service(user_query, links_db):
     query_tokens = set(tokenize(user_query))
+    query_location_tokens = {t for t in query_tokens if t not in SERVICE_TERMS}
     best_key = None
     best_score = 0.0
 
     for key, data in links_db.items():
+        if not isinstance(data, dict):
+            continue
         key_phrase = key.replace("_", " ")
-        candidates = [
+        service_texts = [
             key_phrase,
             data.get("service_name", ""),
             data.get("authority", ""),
-            data.get("coverage", ""),
             " ".join(data.get("keywords", [])),
         ]
-        candidate_tokens = set(tokenize(" ".join(candidates)))
+        coverage_text = data.get("coverage", "")
+        service_tokens = set(tokenize(" ".join(service_texts)))
+        coverage_tokens = set(tokenize(coverage_text))
+        candidate_tokens = service_tokens | coverage_tokens
 
         overlap_score = (
-            len(query_tokens & candidate_tokens) / max(len(candidate_tokens), 1)
+            len(query_tokens & service_tokens) / max(len(service_tokens), 1)
             if query_tokens
+            else 0.0
+        )
+        coverage_overlap_score = (
+            len(query_location_tokens & coverage_tokens) / max(len(coverage_tokens), 1)
+            if query_location_tokens
             else 0.0
         )
         similarity_score = max(
             SequenceMatcher(None, normalize(user_query), normalize(candidate)).ratio()
-            for candidate in candidates
+            for candidate in service_texts + [coverage_text]
             if candidate
         )
-        score = (0.65 * overlap_score) + (0.35 * similarity_score)
+        # If user gave location hints but this service has no location overlap, penalize it.
+        location_mismatch_penalty = 0.0
+        if query_location_tokens and coverage_tokens and not (query_location_tokens & coverage_tokens):
+            location_mismatch_penalty = 0.20
+
+        score = (
+            (0.50 * overlap_score)
+            + (0.25 * similarity_score)
+            + (0.35 * coverage_overlap_score)
+            - location_mismatch_penalty
+        )
 
         if score > best_score:
             best_key = key
@@ -155,8 +199,13 @@ def local_match_service(user_query, links_db):
 
 
 def get_api_key():
-    if "gemini_api_key" in st.secrets:
-        return st.secrets["gemini_api_key"]
+    try:
+        secret_value = st.secrets.get("gemini_api_key")
+        if secret_value:
+            return secret_value
+    except Exception:
+        # No secrets.toml configured; continue with environment fallback.
+        pass
     if "GEMINI_API_KEY" in os.environ:
         return os.environ["GEMINI_API_KEY"]
     if "GOOGLE_API_KEY" in os.environ:
@@ -212,6 +261,7 @@ Return ONLY one exact Database Key from the list above, or "None".
 
 def find_matching_service(user_query, links_db, ai_enabled):
     local_key, local_score = local_match_service(user_query, links_db)
+    query_location_tokens = {t for t in tokenize(user_query) if t not in SERVICE_TERMS}
 
     if local_key and local_score >= 0.45:
         return local_key, "local"
@@ -221,33 +271,130 @@ def find_matching_service(user_query, links_db, ai_enabled):
         if ai_key:
             return ai_key, "ai"
 
-    if local_key and local_score >= 0.25:
+    if local_key and local_score >= 0.25 and not query_location_tokens:
         return local_key, "local-low-confidence"
 
     return None, "none"
 
 
 def is_priority_official_url(url):
-    host = urlparse(url).netloc.lower()
-    return host.endswith(OFFICIAL_SUFFIXES)
+    host = normalize_host(url)
+    return host.endswith(OFFICIAL_SUFFIXES) or host in KNOWN_GOV_RELATED_DOMAINS
 
 
 def is_allowed_web_result(url):
-    host = urlparse(url).netloc.lower()
-    return host.endswith(OFFICIAL_SUFFIXES)
+    host = normalize_host(url)
+    blocked_hosts = (
+        "youtube.com",
+        "instagram.com",
+        "facebook.com",
+        "x.com",
+        "twitter.com",
+        "linkedin.com",
+        "wikipedia.org",
+        "tripadvisor.",
+        "booking.com",
+    )
+    if any(blocked in host for blocked in blocked_hosts):
+        return False
+    return bool(host)
+
+
+def heuristic_government_score(url, title, snippet, query):
+    host = normalize_host(url)
+    text_blob = normalize(f"{title} {snippet} {query} {host}")
+    score = 0.0
+
+    if host.endswith(OFFICIAL_SUFFIXES):
+        score += 0.8
+    if host in KNOWN_GOV_RELATED_DOMAINS:
+        score += 0.65
+
+    positive_terms = [
+        "government", "govt", "ministry", "department", "directorate", "official",
+        "state transport", "tourism board", "shrine board", "municipal corporation",
+        "ministry of", "government of india", "govt of",
+    ]
+    negative_terms = [
+        "agent", "private", "sponsored", "ad", "broker", "travel agency", "coupon",
+        "offer", "discount",
+    ]
+
+    for term in positive_terms:
+        if term in text_blob:
+            score += 0.06
+    for term in negative_terms:
+        if term in text_blob:
+            score -= 0.08
+
+    return min(max(score, 0.0), 1.0)
+
+
+def ai_government_assessment(url, title, snippet, query, ai_enabled):
+    if not ai_enabled:
+        return None
+    active_model = get_best_model()
+    if not active_model:
+        return None
+    prompt = f"""
+Classify if this website is an official government portal in India.
+Return ONLY JSON in one line with keys:
+is_government (true/false), confidence (0 to 1), reason (short text).
+
+URL: {url}
+Title: {title}
+Snippet: {snippet}
+User Query: {query}
+"""
+    try:
+        model = genai.GenerativeModel(active_model)
+        response = model.generate_content(prompt)
+        raw = (getattr(response, "text", "") or "").strip()
+        match = re.search(r"\{.*\}", raw, flags=re.DOTALL)
+        candidate = match.group(0) if match else raw
+        data = json.loads(candidate)
+        conf = float(data.get("confidence", 0))
+        conf = min(max(conf, 0.0), 1.0)
+        is_gov = bool(data.get("is_government", False))
+        reason = str(data.get("reason", "")).strip()
+        return {"is_government": is_gov, "confidence": conf, "reason": reason}
+    except Exception:
+        return None
+
+
+def assess_government_likelihood(url, title, snippet, query, ai_enabled):
+    heuristic_score = heuristic_government_score(url, title, snippet, query)
+    ai_result = None
+    if heuristic_score >= 0.2:
+        ai_result = ai_government_assessment(url, title, snippet, query, ai_enabled)
+
+    if ai_result:
+        ai_score = ai_result["confidence"] if ai_result["is_government"] else (1 - ai_result["confidence"]) * 0.3
+        final_score = (0.55 * heuristic_score) + (0.45 * ai_score)
+        accepted = final_score >= 0.62 and (heuristic_score >= 0.45 or ai_result["is_government"])
+    else:
+        final_score = heuristic_score
+        accepted = final_score >= 0.7
+
+    return {
+        "accepted": accepted,
+        "final_score": round(final_score, 3),
+        "heuristic_score": round(heuristic_score, 3),
+        "ai_result": ai_result,
+    }
 
 
 @st.cache_data(show_spinner=False, ttl=3600)
-def web_fallback_search(user_query):
+def web_fallback_search(user_query, ai_enabled):
     if DDGS is None:
         return []
 
-    search_query = f"{user_query} official government portal india site:gov.in OR site:nic.in"
+    search_query = f"{user_query} official government portal india booking registration"
     seen = set()
-    ranked = []
+    accepted = []
     try:
         with DDGS() as ddgs:
-            results = ddgs.text(search_query, max_results=10)
+            results = ddgs.text(search_query, max_results=14)
             for row in results:
                 url = row.get("href") or row.get("url") or ""
                 title = (row.get("title") or "").strip()
@@ -255,20 +402,24 @@ def web_fallback_search(user_query):
                 if not url or url in seen or not is_allowed_web_result(url):
                     continue
                 seen.add(url)
-                rank_boost = 1 if is_priority_official_url(url) else 0
-                ranked.append(
+                assessment = assess_government_likelihood(url, title, snippet, user_query, ai_enabled)
+                if not assessment["accepted"]:
+                    continue
+                accepted.append(
                     {
                         "title": title or "Official portal",
                         "url": url,
                         "snippet": snippet,
-                        "official": rank_boost == 1,
+                        "official": is_priority_official_url(url),
+                        "gov_score": assessment["final_score"],
+                        "ai_reason": (assessment["ai_result"] or {}).get("reason", ""),
                     }
                 )
     except Exception:
         return []
 
-    ranked.sort(key=lambda x: (0 if x["official"] else 1, x["title"].lower()))
-    return ranked[:5]
+    accepted.sort(key=lambda x: (-x["gov_score"], 0 if x["official"] else 1, x["title"].lower()))
+    return accepted[:5]
 
 
 api_key = get_api_key()
@@ -290,7 +441,7 @@ st.write(
 if ai_enabled:
     st.caption("AI assist is enabled. Local matching remains active as fallback.")
 else:
-    st.caption("Running in self-contained mode (no API key required).")
+    st.caption("Running in self-contained mode (no API key required). Web fallback uses stricter heuristics without AI.")
 
 service_query = st.text_input(
     "What service do you want to avail?",
@@ -317,6 +468,9 @@ if st.button("🔍 Find Official Link", type="primary"):
 
             if matched_key and matched_key in links_db:
                 result = links_db[matched_key]
+                if not isinstance(result, dict):
+                    st.error("Matched entry is not a valid service record.")
+                    st.stop()
                 st.success(f"Verified service found: **{result['service_name']}**")
                 col1, col2 = st.columns([3, 1])
                 with col1:
@@ -338,19 +492,19 @@ if st.button("🔍 Find Official Link", type="primary"):
                     "`Char Dham registration`, or `Vaishno Devi yatra`."
                 )
                 if enable_web_fallback:
-                    with st.spinner("Searching web for likely official portals..."):
-                        web_results = web_fallback_search(combined_query)
+                    with st.spinner("Searching web and checking government likelihood..."):
+                        web_results = web_fallback_search(combined_query, ai_enabled)
                     if web_results:
                         st.warning(
-                            "Not found in internal verified DB. Showing strict official-domain results "
-                            "(`.gov.in` / `.nic.in`)."
+                            "Not found in internal verified DB. Showing high-confidence government-like portals "
+                            "based on domain signals and AI assessment."
                         )
                         top_result = web_results[0]
                         st.link_button(
                             f"🌐 OPEN TOP RESULT: {top_result['title']}",
                             top_result["url"],
                         )
-                        st.caption(top_result["url"])
+                        st.caption(f"{top_result['url']} (government-likelihood score: {top_result['gov_score']})")
                         action, record_key = upsert_discovered_result(
                             links_db, service_query, location_query, top_result
                         )
@@ -366,9 +520,12 @@ if st.button("🔍 Find Official Link", type="primary"):
                             )
                         st.markdown("Other suggested links:")
                         for item in web_results[1:]:
-                            st.markdown(f"- [{item['title']}]({item['url']})")
+                            st.markdown(
+                                f"- [{item['title']}]({item['url']}) "
+                                f"(score: {item['gov_score']})"
+                            )
                     else:
-                        st.info("No strict official-domain results found for this query.")
+                        st.info("No high-confidence government-like results found for this query.")
 
 st.divider()
 st.markdown(

@@ -47,6 +47,14 @@
     "url": "https://ksrtc.in/",
     "tips": "Best for trips like Bangalore to Mysore/Coorg."
   },
+  "upsrtc_bus": {
+    "service_name": "Uttar Pradesh State Road Transport (UPSRTC)",
+    "authority": "UPSRTC (Govt of Uttar Pradesh)",
+    "coverage": "Uttar Pradesh",
+    "keywords": ["upsrtc", "up bus", "uttar pradesh bus", "lucknow", "kanpur", "varanasi", "bus booking"],
+    "url": "https://upsrtc.up.gov.in/",
+    "tips": "Use the official UPSRTC portal for UP roadways bus services and route information."
+  },
   "tirupati_darshan": {
     "service_name": "Tirumala Tirupati Devasthanams (Darshan)",
     "authority": "TTD",
@@ -102,5 +110,286 @@
     "keywords": ["mussoorie", "tourist registration", "dehradun", "uttarakhand tourist care", "guest registration"],
     "url": "https://registrationandtouristcare.uk.gov.in/mussoorie/",
     "tips": "Use the Tourist Care portal for official registration workflows and local compliance."
+  },
+  "trains": {
+    "service_name": "Indian Railways (IRCTC)",
+    "authority": "Ministry of Railways",
+    "url": "https://www.irctc.co.in/",
+    "tips": "The only official site for train bookings. Opens at 8 AM for general quotas."
+  },
+  "--- METRO RAIL SYSTEMS ---": null,
+  "delhi_metro": {
+    "service_name": "Delhi Metro (DMRC)",
+    "authority": "Delhi Metro Rail Corporation",
+    "url": "https://www.delhimetrorail.com/",
+    "tips": "Use 'DMRC Travel' app for QR tickets. Smart cards are available at stations."
+  },
+  "mumbai_metro_1": {
+    "service_name": "Mumbai Metro One (Blue Line)",
+    "authority": "MMOPL (Reliance/MMRDA)",
+    "url": "https://www.mumbaimetroone.com/",
+    "tips": "Connects Versova-Andheri-Ghatkopar. Distinct from other MMRDA lines."
+  },
+  "mumbai_metro_lines": {
+    "service_name": "Maha Mumbai Metro (Yellow/Red Lines)",
+    "authority": "MMMOCL (MMRDA)",
+    "url": "https://mmrda.maharashtra.gov.in/",
+    "tips": "For Lines 2A and 7. Use 'Mumbai 1' App for tickets."
+  },
+  "bangalore_metro": {
+    "service_name": "Namma Metro (BMRCL)",
+    "authority": "Bangalore Metro Rail Corporation",
+    "url": "https://english.bmrc.co.in/",
+    "tips": "Use WhatsApp Chatbot or Namma Metro App for QR tickets to skip queues."
+  },
+  "chennai_metro": {
+    "service_name": "Chennai Metro (CMRL)",
+    "authority": "Chennai Metro Rail Limited",
+    "url": "https://chennaimetrorail.org/",
+    "tips": "Tourists can buy a 'Tourist Card' for unlimited rides for 1 day (₹100)."
+  },
+  "kolkata_metro": {
+    "service_name": "Kolkata Metro",
+    "authority": "Indian Railways (Metro Railway)",
+    "url": "https://mtp.indianrailways.gov.in/",
+    "tips": "India's oldest metro. Smart cards are interoperable on East-West and North-South lines."
+  },
+  "hyderabad_metro": {
+    "service_name": "Hyderabad Metro",
+    "authority": "L&T Metro Rail (Hyderabad)",
+    "url": "https://www.ltmetro.com/",
+    "tips": "Connects Miyapur, LB Nagar, and Hitech City. Use 'TSavaari' App."
+  },
+  "kochi_metro": {
+    "service_name": "Kochi Metro & Water Metro",
+    "authority": "KMRL",
+    "url": "https://kochimetro.org/",
+    "tips": "Same card works for Metro Rail and the Water Metro ferries."
+  },
+  "jaipur_metro": {
+    "service_name": "Jaipur Metro",
+    "authority": "JMRC",
+    "url": "https://transport.rajasthan.gov.in/jmrc",
+    "tips": "Connects Mansarovar to Chandpole/Badi Chaupar."
+  },
+  "up_metros": {
+    "service_name": "UP Metros (Lucknow, Kanpur, Agra)",
+    "authority": "UPMRC",
+    "url": "https://lmrcl.com/",
+    "tips": "Single authority for Lucknow, Kanpur, and Agra metros. GoSmart card works."
+  },
+  "noida_metro": {
+    "service_name": "Noida Metro (Aqua Line)",
+    "authority": "NMRC",
+    "url": "https://www.nmrcnoida.com/",
+    "tips": "Requires separate ticket/card from Delhi Metro. Interchange at Sector 51/52."
+  },
+  "pune_metro": {
+    "service_name": "Pune Metro",
+    "authority": "Maha Metro",
+    "url": "https://www.punemetrorail.org/",
+    "tips": "Two lines operational. Use 'Pune Metro' App for QR tickets."
+  },
+  "nagpur_metro": {
+    "service_name": "Nagpur Metro",
+    "authority": "Maha Metro",
+    "url": "https://www.metrorailnagpur.com/",
+    "tips": "Offers direct connectivity to Airport."
+  },
+  "ahmedabad_metro": {
+    "service_name": "Ahmedabad/Gandhinagar Metro",
+    "authority": "GMRC",
+    "url": "https://www.gujaratmetrorail.com/",
+    "tips": "Connects Motera Stadium and Vastral. expanding rapidly."
+  },
+  "--- STATE BUS SERVICES (SRTCs) ---": null,
+  "ksrtc_karnataka": {
+    "service_name": "KSRTC (Karnataka)",
+    "authority": "Karnataka State Road Transport Corp",
+    "url": "https://ksrtc.in/",
+    "tips": "Best for Bangalore, Mysore, Coorg, Hampi. 'Ambaari' is the luxury sleeper class."
+  },
+  "apsrtc_andhra": {
+    "service_name": "APSRTC (Andhra Pradesh)",
+    "authority": "Andhra Pradesh State Road Transport Corp",
+    "url": "https://www.apsrtconline.in/",
+    "tips": "Official buses for Tirupati, Vijayawada, and Visakhapatnam."
+  },
+  "tsrtc_telangana": {
+    "service_name": "TSRTC (Telangana)",
+    "authority": "Telangana State Road Transport Corp",
+    "url": "https://www.tsrtconline.in/",
+    "tips": "Buses from Hyderabad to all districts. 'Garuda' is the premium AC class."
+  },
+  "msrtc_maharashtra": {
+    "service_name": "MSRTC (Maharashtra)",
+    "authority": "Maharashtra State Road Transport Corp",
+    "url": "https://msrtc.maharashtra.gov.in/",
+    "tips": "Search for 'Shivneri' (Volvo) for Mumbai-Pune-Nasik routes. 'Lal Pari' is the local red bus."
+  },
+  "gsrtc_gujarat": {
+    "service_name": "GSRTC (Gujarat)",
+    "authority": "Gujarat State Road Transport Corp",
+    "url": "https://gsrtc.in/",
+    "tips": "Connects Ahmedabad, Surat, Somnath, Dwarka, and Rann of Kutch."
+  },
+  "rsrtc_rajasthan": {
+    "service_name": "RSRTC (Rajasthan)",
+    "authority": "Rajasthan State Road Transport Corp",
+    "url": "https://rsrtconline.rajasthan.gov.in/",
+    "tips": "Best for Jaipur, Udaipur, Jodhpur, Jaisalmer. Look for 'Super Luxury' Volvo."
+  },
+  "upsrtc_uttar_pradesh": {
+    "service_name": "UPSRTC (Uttar Pradesh)",
+    "authority": "UP State Road Transport Corp",
+    "url": "https://upsrtc.com/",
+    "tips": "Essential for Agra, Ayodhya, Varanasi, and Kumbh Mela travel."
+  },
+  "bsrtc_bihar": {
+    "service_name": "BSRTC (Bihar)",
+    "authority": "Bihar State Road Transport Corporation",
+    "coverage": "Bihar",
+    "keywords": ["bsrtc", "bihar bus", "patna bus", "state bus bihar", "bihar transport"],
+    "url": "https://state.bihar.gov.in/transport/CitizenHome.html",
+    "tips": "Use Bihar Transport's official portal for state transport information and official services."
+  },
+  "hrtc_himachal": {
+    "service_name": "HRTC (Himachal Pradesh)",
+    "authority": "Himachal Road Transport Corp",
+    "url": "https://online.hrtchp.com/",
+    "tips": "The lifeline of the mountains. Best for Manali, Shimla, Dharamshala, and Leh."
+  },
+  "utc_uttarakhand": {
+    "service_name": "UTC (Uttarakhand)",
+    "authority": "Uttarakhand Transport Corp",
+    "url": "https://utconline.uk.gov.in/",
+    "tips": "Buses to Rishikesh, Haridwar, Nainital, Dehradun, and Char Dham Yatra points."
+  },
+  "punjab_roadways": {
+    "service_name": "PUNBUS / Punjab Roadways",
+    "authority": "Dept of Transport, Punjab",
+    "url": "https://www.punbusonline.com/",
+    "tips": "Official booking for Amritsar, Chandigarh, Ludhiana, and Delhi airport Volvo buses."
+  },
+  "pepsu_punjab": {
+    "service_name": "PRTC (Pepsu)",
+    "authority": "Pepsu Road Transport Corp",
+    "url": "https://www.pepsuonline.com/",
+    "tips": "Serving Patiala, Bathinda, and southern Punjab routes."
+  },
+  "haryana_roadways": {
+    "service_name": "Haryana Roadways",
+    "authority": "State Transport Haryana",
+    "url": "https://ors.hartrans.gov.in/",
+    "tips": "Known for fast and frequent service to Delhi, Chandigarh, and Gurgaon."
+  },
+  "tnstc_tamil_nadu": {
+    "service_name": "TNSTC & SETC (Tamil Nadu)",
+    "authority": "Govt of Tamil Nadu",
+    "url": "https://www.tnstc.in/",
+    "tips": "SETC (State Express) is for long distance (Chennai-Madurai). TNSTC is for shorter inter-city."
+  },
+  "kerala_ksrtc": {
+    "service_name": "KSRTC (Kerala)",
+    "authority": "Kerala State Road Transport Corp",
+    "url": "https://online.keralartc.com/",
+    "tips": "Look for 'K-Swift' or 'Minnal' buses for faster travel. Connects Munnar, Thekkady, Alleppey."
+  },
+  "wbtc_west_bengal": {
+    "service_name": "WBTC (Kolkata & South Bengal)",
+    "authority": "West Bengal Transport Corp",
+    "url": "https://wbtc.co.in/",
+    "tips": "For AC Volvos within Kolkata and to Digha/Sundarbans."
+  },
+  "nbstc_north_bengal": {
+    "service_name": "NBSTC (North Bengal)",
+    "authority": "North Bengal State Transport Corp",
+    "url": "https://nbstc.in/",
+    "tips": "Essential for travel to Siliguri, Darjeeling, Cooch Behar, and Dooars region."
+  },
+  "sbstc_south_bengal": {
+    "service_name": "SBSTC (South Bengal)",
+    "authority": "South Bengal State Transport Corp",
+    "url": "https://www.online.sbstc.co.in/",
+    "tips": "Connects Durgapur, Asansol, Bankura, and Purulia."
+  },
+  "osrtc_odisha": {
+    "service_name": "OSRTC (Odisha)",
+    "authority": "Odisha State Road Transport Corp",
+    "url": "https://osrtc.in/",
+    "tips": "Direct buses to Puri (Jagannath Temple), Bhubaneswar, and Cuttack."
+  },
+  "astc_assam": {
+    "service_name": "ASTC (Assam)",
+    "authority": "Assam State Transport Corp",
+    "url": "https://astc.assam.gov.in/",
+    "tips": "Hub for travel in North East India (Guwahati to Shillong, Kaziranga)."
+  },
+  "jksrtc_kashmir": {
+    "service_name": "JKSRTC (J&K)",
+    "authority": "J&K Road Transport Corp",
+    "url": "https://www.jksrtc.co.in/",
+    "tips": "Official buses for Jammu-Srinagar highway and Srinagar-Leh route."
+  },
+  "kadamba_goa": {
+    "service_name": "Kadamba Transport (Goa)",
+    "authority": "Govt of Goa",
+    "url": "https://ktclgoa.com/",
+    "tips": "Airport shuttles and inter-city buses connecting Panjim, Margao, and Vasco."
+  },
+  "--- SAFARIS & PERMITS ---": null,
+  "ranthambore_safari": {
+    "service_name": "Ranthambore Tiger Safari",
+    "authority": "Forest Dept, Govt of Rajasthan",
+    "url": "https://fmdss.forest.rajasthan.gov.in/",
+    "tips": "Login via SSO ID is required. Book 90 days in advance."
+  },
+  "jim_corbett_safari": {
+    "service_name": "Jim Corbett Safari Booking",
+    "authority": "Uttarakhand Forest Department",
+    "url": "https://corbettonline.uk.gov.in/",
+    "tips": "Book 'Dhikala' zone for night stays inside the jungle."
+  },
+  "gir_safari": {
+    "service_name": "Gir Jungle Safari (Lions)",
+    "authority": "Girlion (Govt of Gujarat)",
+    "url": "https://girlion.gujarat.gov.in/",
+    "tips": "The ONLY official site. Beware of fake .com lookalikes."
+  },
+  "tadoba_safari": {
+    "service_name": "Tadoba-Andhari Tiger Reserve",
+    "authority": "MahaForest (Govt of Maharashtra)",
+    "url": "https://safaribooking.mahaforest.gov.in/",
+    "tips": "Also covers Pench (MH), Bor, and Melghat reserves."
+  },
+  "bandipur_safari": {
+    "service_name": "Bandipur Tiger Reserve",
+    "authority": "Bandipur Tiger Conservation Foundation",
+    "url": "https://bandipurtr.in/",
+    "tips": "Official portal for safari and cottage booking in Bandipur."
+  },
+  "nagarhole_safari": {
+    "service_name": "Nagarhole Tiger Reserve",
+    "authority": "Karnataka Forest Department",
+    "url": "https://nagarholetr.com/",
+    "tips": "Bookings for Kabini and Veeranahosahalli zones."
+  },
+  "lakshadweep_permit": {
+    "service_name": "Lakshadweep Entry Permit",
+    "authority": "Lakshadweep Administration",
+    "url": "https://epermit.utl.gov.in/",
+    "tips": "Mandatory for all non-residents to enter the islands."
+  },
+  "arunachal_ilp": {
+    "service_name": "Arunachal Pradesh ILP",
+    "authority": "Govt of Arunachal Pradesh",
+    "url": "https://arunachalilp.com/",
+    "tips": "Inner Line Permit required for all Indian tourists."
+  },
+  "sikkim_permits": {
+    "service_name": "Sikkim Restricted Area Permit",
+    "authority": "Govt of Sikkim",
+    "url": "https://www.sikkimtourism.gov.in/",
+    "tips": "Apply for Nathula Pass and North Sikkim permits here."
   }
 }
