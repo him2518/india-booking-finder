@@ -2,43 +2,105 @@
   "train_booking": {
     "service_name": "Indian Railways Train Tickets",
     "authority": "IRCTC (Ministry of Railways)",
+    "coverage": "Pan India",
+    "keywords": ["train", "railway", "irctc", "rail", "ticket", "tatkal", "delhi", "mumbai", "kolkata", "chennai"],
     "url": "https://www.irctc.co.in/",
     "tips": "Bookings open at 10 AM / 11 AM for Tatkal. Create an account beforehand."
   },
   "taj_mahal": {
     "service_name": "Taj Mahal Entry Ticket",
     "authority": "ASI (Archaeological Survey of India)",
+    "coverage": "Agra, Uttar Pradesh",
+    "keywords": ["taj", "taj mahal", "agra", "monument", "entry", "asi", "ticket"],
     "url": "https://asi.payumoney.com/",
     "tips": "Select 'Agra Circle' -> 'Taj Mahal'. Foreigners get a separate queue."
   },
   "kerala_ferry": {
     "service_name": "Kerala State Water Transport",
     "authority": "SWTD (Govt of Kerala)",
+    "coverage": "Kerala",
+    "keywords": ["kerala", "ferry", "boat", "alappuzha", "water transport", "swtd"],
     "url": "https://swtd.kerala.gov.in/",
     "tips": "For tourist boats in Alappuzha, verify schedules here."
   },
   "andaman_ferry": {
     "service_name": "Andaman Inter-Island Ferry",
     "authority": "Directorate of Shipping Services (A&N Admin)",
+    "coverage": "Andaman and Nicobar Islands",
+    "keywords": ["andaman", "havelock", "inter island", "ferry", "ship", "dss"],
     "url": "https://dss.andaman.gov.in/",
     "tips": "Tickets usually open 3-4 days in advance. High demand."
   },
   "statue_of_unity": {
     "service_name": "Statue of Unity Tickets",
     "authority": "SOU Authority (Govt of Gujarat)",
+    "coverage": "Kevadia, Gujarat",
+    "keywords": ["statue of unity", "gujarat", "kevadiya", "sou", "entry ticket"],
     "url": "https://soutickets.in/",
     "tips": "Viewing Gallery tickets sell out fast. Book 1 week prior."
   },
   "ksrtc_bus": {
     "service_name": "Karnataka State Road Transport (KSRTC)",
     "authority": "KSRTC (Govt of Karnataka)",
+    "coverage": "Karnataka",
+    "keywords": ["ksrtc", "bus", "karnataka", "bengaluru", "mysore", "coorg"],
     "url": "https://ksrtc.in/",
     "tips": "Best for trips like Bangalore to Mysore/Coorg."
   },
   "tirupati_darshan": {
     "service_name": "Tirumala Tirupati Devasthanams (Darshan)",
     "authority": "TTD",
+    "coverage": "Tirupati, Andhra Pradesh",
+    "keywords": ["tirupati", "darshan", "ttd", "balaji", "temple", "andhra"],
     "url": "https://tirupatibalaji.ap.gov.in/",
     "tips": "Special Entry Darshan (₹300) opens months in advance. Beware of fake sites."
+  },
+  "india_evisa": {
+    "service_name": "India e-Visa Application",
+    "authority": "Bureau of Immigration, Ministry of Home Affairs",
+    "coverage": "International travelers to India",
+    "keywords": ["visa", "evisa", "tourist visa", "entry permit", "foreigner", "travel authorization"],
+    "url": "https://indianvisaonline.gov.in/evisa/",
+    "tips": "Apply only on the official portal. Do not use private agents claiming faster approvals."
+  },
+  "passport_seva": {
+    "service_name": "Passport Application / Appointment",
+    "authority": "Passport Seva, Ministry of External Affairs",
+    "coverage": "Pan India",
+    "keywords": ["passport", "renew passport", "passport appointment", "psk", "seva kendra"],
+    "url": "https://passportindia.gov.in/",
+    "tips": "Book appointments from official Passport Seva only. Keep documents ready before payment."
+  },
+  "vaishno_devi_yatra": {
+    "service_name": "Vaishno Devi Yatra Registration",
+    "authority": "Shri Mata Vaishno Devi Shrine Board",
+    "coverage": "Katra, Jammu & Kashmir",
+    "keywords": ["vaishno devi", "katra", "yatra", "rfid", "shrine board", "helicopter", "darshan"],
+    "url": "https://www.maavaishnodevi.org/",
+    "tips": "Yatra registration/RFID is mandatory. Use only Shrine Board website for bookings and services."
+  },
+  "amarnath_yatra": {
+    "service_name": "Amarnath Yatra Registration",
+    "authority": "Shri Amarnathji Shrine Board (SASB)",
+    "coverage": "Jammu & Kashmir",
+    "keywords": ["amarnath", "yatra", "sasb", "pilgrimage", "registration", "jammu"],
+    "url": "https://jksasb.nic.in/",
+    "tips": "Complete health and permit requirements before travel. Register only through SASB channels."
+  },
+  "chardham_registration": {
+    "service_name": "Char Dham / Tourist Registration (Uttarakhand)",
+    "authority": "Uttarakhand Tourism Development Board",
+    "coverage": "Uttarakhand",
+    "keywords": ["chardham", "char dham", "kedarnath", "badrinath", "gangotri", "yamunotri", "uttarakhand registration"],
+    "url": "https://registrationandtouristcare.uk.gov.in/",
+    "tips": "Register pilgrims in advance and carry QR/registration proof during the journey."
+  },
+  "mussoorie_tourist_registration": {
+    "service_name": "Mussoorie Tourist Care Registration",
+    "authority": "Uttarakhand Tourism Development Board",
+    "coverage": "Mussoorie, Uttarakhand",
+    "keywords": ["mussoorie", "tourist registration", "dehradun", "uttarakhand tourist care", "guest registration"],
+    "url": "https://registrationandtouristcare.uk.gov.in/mussoorie/",
+    "tips": "Use the Tourist Care portal for official registration workflows and local compliance."
   }
 }
